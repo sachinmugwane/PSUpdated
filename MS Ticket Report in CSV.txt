@@ -1,0 +1,32 @@
+# Get all subscriptions
+$subscriptions = Get-AzSubscription
+
+# Initialize an empty array to hold the ticket details
+$tickets = @()
+
+foreach ($subscription in $subscriptions) {
+    # Set the context to the current subscription
+    Set-AzContext -SubscriptionId $subscription.Id
+
+    # Get all open support tickets for the current subscription
+    $openTickets = Get-AzSupportTicket -Filter "Status eq 'Open' and CreatedDate gt 2024-03-01"
+
+    foreach ($ticket in $openTickets) {
+        # Add the ticket details to the array
+        $tickets += [PSCustomObject]@{
+            Title              = $ticket.Title
+            TicketID           = "`"$($ticket.SupportTicketId)`""  # Add quotes around the ID
+            Subscription       = $subscription.Name
+            CreatedDate        = $ticket.CreatedDate
+            ServiceDisplayName = $ticket.ServiceDisplayName
+            ModifiedDate       = $ticket.ModifiedDate
+            Status             = $ticket.Status
+            TicketCreatedBy    = $ticket.ContactDetailPrimaryEmailAddress
+            FirstName          = $ticket.ContactDetailFirstName
+            LastName           = $ticket.ContactDetailLastName
+        }
+    }
+}
+
+# Output the ticket details
+$tickets | Export-Csv -Path "C:\Reports\MSTicketReport.csv" -NoTypeInformation

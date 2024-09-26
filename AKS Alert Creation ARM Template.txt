@@ -1,0 +1,471 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "metricAlerts_Insurance-AKS_CPU_Usage_Percentage_name": {
+            "defaultValue": "Insurance-AKS-CPU-Usage-Percentage",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Disk_Used_Percentage_name": {
+            "defaultValue": "Insurance-AKS-Disk-Used-Percentage",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Memory_RSS_Percentage_name": {
+            "defaultValue": "Insurance-AKS-Memory-RSS-Percentage",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Memory_Working_Set_Percentage_name": {
+            "defaultValue": "Insurance-AKS-Memory-Working-Set-Percentage",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Number_of_Pods_by_Phase_name": {
+            "defaultValue": "Insurance-AKS-Number-of-Pods-by-Phase",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Statuses_for_Various_Node_Conditions_name": {
+            "defaultValue": "Insurance-AKS-Statuses-for-Various-Node-Conditions",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Total_Amount_of_Available_Memory_name": {
+            "defaultValue": "Insurance-AKS-Total-Amount-of-Available-Memory",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Total_Number_of_Available_CPU_Cores_name": {
+            "defaultValue": "Insurance-AKS-Total-Number-of-Available-CPU-Cores",
+            "type": "String"
+        },
+        "metricAlerts_Insurance-AKS_Unschedulable_Pods_name": {
+            "defaultValue": "Insurance-AKS-Unschedulable-Pods",
+            "type": "String"
+        },
+        "managedClusters_Insurance-AKS_externalid": {
+            "defaultValue": "/subscriptions/8ebc51b4-d275-42ea-895f-2a339da3f623/resourceGroups/myrg-1/providers/Microsoft.ContainerService/managedClusters/Insurannce-AKS",
+            "type": "String"
+        },
+        "actiongroups_Rewards-Team_externalid": {
+            "defaultValue": "/subscriptions/8ebc51b4-d275-42ea-895f-2a339da3f623/resourceGroups/myrg-1/providers/microsoft.insights/actiongroups/Rewards-Team",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_CPU_Usage_Percentage_name')]",
+            "location": "global",
+            "properties": {
+                "description": "This alert will trigger when node CPU utilization is greater than 80%",
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 80,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "node_cpu_usage_percentage",
+                            "dimensions": [
+                                {
+                                    "name": "node",
+                                    "operator": "Include",
+                                    "values": [
+                                        "*"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Disk_Used_Percentage_name')]",
+            "location": "global",
+            "properties": {
+                "description": "This alert will trigger when node disk utilization is greater than or equals to 80%",
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 80,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "node_disk_usage_percentage",
+                            "dimensions": [
+                                {
+                                    "name": "node",
+                                    "operator": "Include",
+                                    "values": [
+                                        "*"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Memory_RSS_Percentage_name')]",
+            "location": "global",
+            "properties": {
+                "description": "This alert will trigger when memory rss percentage is greater than or equalst to 80%",
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 80,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "node_memory_rss_percentage",
+                            "dimensions": [
+                                {
+                                    "name": "node",
+                                    "operator": "Include",
+                                    "values": [
+                                        "*"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Memory_Working_Set_Percentage_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 80,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "node_memory_working_set_percentage",
+                            "dimensions": [
+                                {
+                                    "name": "node",
+                                    "operator": "Include",
+                                    "values": [
+                                        "*"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Number_of_Pods_by_Phase_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 0,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "kube_pod_status_phase",
+                            "dimensions": [
+                                {
+                                    "name": "phase",
+                                    "operator": "Include",
+                                    "values": [
+                                        "Unknown",
+                                        "Failed",
+                                        "Pending"
+                                    ]
+                                },                                
+                            ],
+                            "operator": "GreaterThan",
+                            "timeAggregation": "Total",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Statuses_for_Various_Node_Conditions_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 0,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "kube_node_status_condition",
+                            "dimensions": [
+                                {
+                                    "name": "status2",
+                                    "operator": "Include",
+                                    "values": [
+                                        "NotReady",
+                                        "Unknown"
+                                    ]
+                                },
+                                {
+                                    "name": "node",
+                                    "operator": "Include",
+                                    "values": [
+                                        "*"
+                                    ]
+                                }
+                            ],
+                            "operator": "GreaterThan",
+                            "timeAggregation": "Total",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Total_Amount_of_Available_Memory_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 35000000000,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "kube_node_status_allocatable_memory_bytes",
+                            "operator": "LessThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Total_Number_of_Available_CPU_Cores_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 10,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "kube_node_status_allocatable_cpu_cores",
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Average",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actiongroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        },
+        {
+            "type": "microsoft.insights/metricAlerts",
+            "apiVersion": "2018-03-01",
+            "name": "[parameters('metricAlerts_Insurance-AKS_Unschedulable_Pods_name')]",
+            "location": "global",
+            "properties": {
+                "severity": 2,
+                "enabled": true,
+                "scopes": [
+                    "[parameters('managedClusters_Insurance-AKS_externalid')]"
+                ],
+                "evaluationFrequency": "PT5M",
+                "windowSize": "PT15M",
+                "criteria": {
+                    "allOf": [
+                        {
+                            "threshold": 1,
+                            "name": "Metric1",
+                            "metricNamespace": "Microsoft.ContainerService/managedClusters",
+                            "metricName": "cluster_autoscaler_unschedulable_pods_count",
+                            "operator": "GreaterThanOrEqual",
+                            "timeAggregation": "Total",
+                            "skipMetricValidation": false,
+                            "criterionType": "StaticThresholdCriterion"
+                        }
+                    ],
+                    "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria"
+                },
+                "autoMitigate": true,
+                "targetResourceType": "Microsoft.ContainerService/managedClusters",
+                "targetResourceRegion": "centralindia",
+                "actions": [
+                    {
+                        "actionGroupId": "[parameters('actionGroups_Rewards-Team_externalid')]",
+                        "webHookProperties": {}
+                    }
+                ]
+            }
+        }
+    ]
+}
